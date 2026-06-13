@@ -25,16 +25,35 @@ SHREP_SHEET = "shrep"
 BRAND_NAME = "Andy's LineMatcher"
 TAGLINE = "Smart city matching for RC <-> Shipment Report"
 
-CONSOLE_BANNER_LINES = [
-    "    _    _   _ ____  _   _ ____    __  __    _  _____ ____ _   _ _____ ____",
-    "   / \\  | \\ | |  _ \\| | | / ___|  |  \\/  |  / \\|_   _/ ___| | | | ____|  _ \\",
-    "  / _ \\ |  \\| | | | | | | \\___ \\  | |\\/| | / _ \\ | || |   | |_| |  _| | |_) |",
-    " / ___ \\| |\\  | |_| | |_| |___) | | |  | |/ ___ \\| || |___|  _  | |___|  _ <",
-    "/_/   \\_\\_| \\_|____/ \\___/|____/  |_|  |_/_/   \\_\\_| \\____|_| |_|_____|_| \\_\\",
-]
+BANNER_FONT = {
+    "A": [" █████╗ ", "██╔══██╗", "███████║", "██╔══██║", "██║  ██║", "╚═╝  ╚═╝"],
+    "N": ["███╗   ██╗", "████╗  ██║", "██╔██╗ ██║", "██║╚██╗██║", "██║ ╚████║", "╚═╝  ╚═══╝"],
+    "D": ["██████╗ ", "██╔══██╗", "██║  ██║", "██║  ██║", "██████╔╝", "╚═════╝ "],
+    "Y": ["██╗   ██╗", "╚██╗ ██╔╝", " ╚████╔╝ ", "  ╚██╔╝  ", "   ██║   ", "   ╚═╝   "],
+    "'": ["██╗", "╚═╝", "  ", "  ", "  ", "  "],
+    "S": ["███████╗", "██╔════╝", "███████╗", "╚════██║", "███████║", "╚══════╝"],
+    "M": ["███╗   ███╗", "████╗ ████║", "██╔████╔██║", "██║╚██╔╝██║", "██║ ╚═╝ ██║", "╚═╝     ╚═╝"],
+    "T": ["████████╗", "╚══██╔══╝", "   ██║   ", "   ██║   ", "   ██║   ", "   ╚═╝   "],
+    "C": [" ██████╗ ", "██╔════╝ ", "██║      ", "██║      ", "╚██████╗ ", " ╚═════╝ "],
+    "H": ["██╗  ██╗", "██║  ██║", "███████║", "██╔══██║", "██║  ██║", "╚═╝  ╚═╝"],
+    "E": ["███████╗", "██╔════╝", "█████╗  ", "██╔══╝  ", "███████╗", "╚══════╝"],
+    "R": ["██████╗ ", "██╔══██╗", "██████╔╝", "██╔══██╗", "██║  ██║", "╚═╝  ╚═╝"],
+    " ": ["   ", "   ", "   ", "   ", "   ", "   "],
+}
+
+
+def build_block_banner(text: str) -> list[str]:
+    rows: list[str] = []
+    for row_index in range(6):
+        parts = [BANNER_FONT[char][row_index] for char in text]
+        rows.append("  " + " ".join(parts))
+    return rows
+
+
+CONSOLE_BANNER_LINES = build_block_banner("ANDY'S MATCHER")
 
 MINI_BANNER_LINES = [
-    "  andys matcher",
+    "  Andy's MatcheR",
 ]
 
 RC_CITY_COL = "Destination City"
@@ -659,10 +678,10 @@ def count_status(records: list[dict[str, object]], status: str) -> int:
 
 def print_banner() -> None:
     terminal = shutil.get_terminal_size(fallback=(120, 40))
-    lines = CONSOLE_BANNER_LINES if terminal.columns >= 76 else MINI_BANNER_LINES
+    lines = CONSOLE_BANNER_LINES if terminal.columns >= 132 else MINI_BANNER_LINES
     print()
-    for index, line in enumerate(lines):
-        tone = "dim" if "andy" in line.lower() else "ember"
+    for line in lines:
+        tone = "ember" if line in CONSOLE_BANNER_LINES else "dim"
         print(colorize(line, tone))
     print(colorize(TAGLINE, "dim"))
     print(colorize("-" * 64, "ember"))
